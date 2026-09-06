@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 4.0,
+        "max": 6.0
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glass_bottle",
+          "weight": 35,
+          "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1.0, "max": 5.0}, "add": false}]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "weight": 20,
+          "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1.0, "max": 4.0}, "add": false}]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "weight": 12,
+          "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1.0, "max": 2.0}, "add": false}]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:redstone",
+          "weight": 18,
+          "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1.0, "max": 4.0}, "add": false}]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:sugar",
+          "weight": 30,
+          "functions": [{"function": "minecraft:set_count", "count": {"type": "minecraft:uniform", "min": 1.0, "max": 4.0}, "add": false}]
+        },
+        {"type": "minecraft:item", "name": "minecraft:honey_bottle", "weight": 18},
+        {"type": "minecraft:empty", "weight": 15}
+      ]
+    },
+    {
+      "bonus_rolls": 0.0,
+      "rolls": 1.0,
+      "entries": [
+        {"type": "minecraft:item", "name": "zombie-infection:extraction_kit", "weight": 6},
+        {"type": "minecraft:item", "name": "zombie-infection:infected_sample", "weight": 1},
+        {"type": "minecraft:item", "name": "zombie-infection:basic_antiviral", "weight": 7},
+        {"type": "minecraft:item", "name": "zombie-infection:antiviral_injection", "weight": 1},
+        {"type": "minecraft:empty", "weight": 85}
+      ]
+    }
+  ],
+  "random_sequence": "zombie-infection:chests/abandoned_pharmacy"
+}

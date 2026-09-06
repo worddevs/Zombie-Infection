@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.carloshdzz22.zombieinfection.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "EntityTypeNaturalSpawnMixin",
+    "VillageSiegeMixin",
+    "ServerLevelExplosionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

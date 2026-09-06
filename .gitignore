@@ -1,0 +1,63 @@
+# gradle
+
+.gradle/
+.gradletasknamecache
+build/
+out/
+classes/
+
+# eclipse
+
+*.launch
+.factorypath
+.metadata/
+
+# idea
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# vscode
+
+.settings/
+.vscode/
+*.code-workspace
+bin/
+.classpath
+.project
+
+# macos
+
+*.DS_Store
+Thumbs.db
+Desktop.ini
+
+# fabric
+
+run/
+.mixin.out/
+
+# java
+
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+*.class
+*.log
+
+# temporary files
+
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# local environment files
+
+.env
+.env.*
+!.env.example

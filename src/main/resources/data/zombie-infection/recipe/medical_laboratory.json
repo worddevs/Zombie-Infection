@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IGI",
+    "RBR",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:glass",
+    "B": "minecraft:brewing_stand",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "zombie-infection:medical_laboratory",
+    "count": 1
+  }
+}

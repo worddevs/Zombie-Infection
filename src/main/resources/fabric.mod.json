@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "zombie-infection",
+	"version": "${version}",
+	"name": "Zombie Infection",
+	"description": "A survival-horror zombie infection system with progressive symptoms and craftable treatments.",
+	"authors": [
+		"Carloshdz_024"
+	],
+	"license": "CC0-1.0",
+	"icon": "assets/zombie-infection/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.carloshdzz22.zombieinfection.ZombieInfection"
+		],
+		"client": [
+			"com.carloshdzz22.zombieinfection.client.ZombieInfectionClient"
+		],
+		"rei_client": [
+			"com.carloshdzz22.zombieinfection.compat.rei.ZombieInfectionReiClientPlugin"
+		]
+	},
+	"mixins": [
+		"zombie-infection.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*",
+		"smartbrainlib": ">=1.16.10"
+	},
+	"suggests": {
+		"roughlyenoughitems": ">=20.0.811"
+	}
+}

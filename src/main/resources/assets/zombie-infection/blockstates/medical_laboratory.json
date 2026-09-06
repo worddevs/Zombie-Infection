@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "zombie-infection:block/medical_laboratory",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "zombie-infection:block/medical_laboratory",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "zombie-infection:block/medical_laboratory",
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "zombie-infection:block/medical_laboratory",
+      "y": 90,
+      "uvlock": true
+    }
+  }
+}

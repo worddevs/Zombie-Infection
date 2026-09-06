@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 17042041,
+    "separation": 14,
+    "spacing": 36
+  },
+  "structures": [
+    {
+      "structure": "zombie-infection:abandoned_pharmacy",
+      "weight": 1
+    }
+  ]
+}

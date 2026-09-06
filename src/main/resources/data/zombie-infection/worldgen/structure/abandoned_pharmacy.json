@@ -1,0 +1,6 @@
+{
+  "type": "zombie-infection:abandoned_pharmacy",
+  "biomes": "#zombie-infection:has_structure/medical_sites",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

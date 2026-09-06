@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "zombie-infection:item/bloater_spawn_egg"
+  }
+}
