@@ -224,19 +224,7 @@ Las contribuciones son bienvenidas. Para cambios de código:
 3. mantén el cambio limitado a un objetivo;
 4. ejecuta `gradlew clean build`;
 5. abre un Pull Request explicando el comportamiento anterior, el nuevo y cómo se validó.
-
-## Cambios de la versión 0.4.0
-
-- Monitor de infección oscuro y adaptable, separado del inventario vanilla y compatible con interfaces de otros mods.
-- Menú principal tematizado como red de cuarentena, conservando los botones y acciones de Minecraft y Mod Menu.
-- Regreso correcto al inventario de supervivencia o creativo después de cerrar el monitor.
-- Eliminación del listener de ratón duplicado del botón de acceso médico.
-- Límite local progresivo para impedir acumulaciones masivas de infectados especiales.
-- Grupos naturales más pequeños y composición inicial con menos predominio de Runners.
-- Clínicas y farmacias abandonadas considerablemente más fáciles de encontrar durante exploración normal.
-- Estado Outbreak ampliado con información sobre el protocolo de contención local.
-- Recursos y traducciones revisados en inglés, español y español de México.
-
+6. 
 ## Créditos
 
 - **Creación, dirección y diseño:** [Carlos Hernández (@Carloshdz22)](https://github.com/Carloshdz22).
