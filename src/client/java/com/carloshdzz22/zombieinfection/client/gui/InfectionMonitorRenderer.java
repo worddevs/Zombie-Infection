@@ -288,7 +288,7 @@ final class InfectionMonitorRenderer {
             graphics.fill(x, y + 119, x + width, y + 120, 0xFF263138);
             drawWrapped(graphics, font,
                     Component.translatable("screen.zombie-infection.record.outbreak.population",
-                            outbreak.localPopulationCap()),
+                            outbreak.localPopulationCap(), outbreak.localSpecialCap()),
                     x, y + 129, width, 3, 0xFF7F919A);
         }
     }

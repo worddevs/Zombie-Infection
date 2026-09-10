@@ -19,7 +19,10 @@ public class ZombieInfection implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		com.carloshdzz22.zombieinfection.config.GameplayConfig.initialize();
 		InfectionAttachments.initialize();
+		com.carloshdzz22.zombieinfection.infection.InfectionFeedback.initialize();
+		com.carloshdzz22.zombieinfection.outbreak.OutbreakNotifications.initialize();
 		ModEntities.initialize();
 		ModStructures.initialize();
 		SpecialInfectedSpawning.initialize();

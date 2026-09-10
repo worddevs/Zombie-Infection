@@ -1,5 +1,6 @@
 package com.carloshdzz22.zombieinfection.client.gui;
 
+import com.carloshdzz22.zombieinfection.client.ZombieInfectionClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,10 @@ public final class InfectionStatusScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (ZombieInfectionClient.matchesMedicalRecordMouse(button)) {
+            onClose();
+            return true;
+        }
         if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
             if (InfectionMonitorRenderer.closeAt(mouseX, mouseY, width, height)) {
                 onClose();
@@ -39,7 +44,7 @@ public final class InfectionStatusScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_I) {
+        if (ZombieInfectionClient.matchesMedicalRecordKey(keyCode, scanCode)) {
             onClose();
             return true;
         }

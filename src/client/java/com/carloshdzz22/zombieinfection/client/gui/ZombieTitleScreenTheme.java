@@ -2,6 +2,7 @@ package com.carloshdzz22.zombieinfection.client.gui;
 
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -16,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ZombieTitleScreenTheme {
+    private static final String VERSION_LABEL = "v" + FabricLoader.getInstance()
+            .getModContainer("zombie-infection").orElseThrow().getMetadata().getVersion().getFriendlyString()
+            + "  //  BETA";
     private static final int PANEL_X = 18;
     private static final int PANEL_WIDTH = 214;
     private static final int BUTTON_X = PANEL_X + 13;
@@ -133,14 +137,14 @@ public final class ZombieTitleScreenTheme {
             }
 
             Component network = Component.translatable("menu.zombie-infection.network");
-            int labelWidth = Math.max(font.width(network), font.width("v0.4.0  //  CC0-1.0"));
+            int labelWidth = Math.max(font.width(network), font.width(VERSION_LABEL));
             int right = getWidth() - 16;
             int left = right - labelWidth - 27;
             graphics.fill(left, 12, right, 43, 0xA70A1217);
             graphics.renderOutline(left, 12, right - left, 31, 0xB23A4C55);
             graphics.fill(left + 9, 21, left + 14, 26, 0xFF58D991);
             graphics.drawString(font, network, left + 20, 17, 0xFFD0DADF, false);
-            graphics.drawString(font, "v0.4.0  //  CC0-1.0",
+            graphics.drawString(font, VERSION_LABEL,
                     left + 20, 29, 0xFF72858E, false);
         }
 

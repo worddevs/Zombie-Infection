@@ -26,8 +26,21 @@ public class ZombieInfectionClient implements ClientModInitializer {
 			"key.categories.zombie-infection"
 	));
 
+	public static boolean matchesMedicalRecordKey(int keyCode, int scanCode) {
+		return OPEN_INFECTION_STATUS.matches(keyCode, scanCode);
+	}
+
+	public static boolean matchesMedicalRecordMouse(int button) {
+		return OPEN_INFECTION_STATUS.matchesMouse(button);
+	}
+
 	@Override
 	public void onInitializeClient() {
+		com.carloshdzz22.zombieinfection.client.config.HealthBarConfig.initialize();
+		ClientTickEvents.END_CLIENT_TICK.register(
+				com.carloshdzz22.zombieinfection.client.renderer.InfectedTargeting::tick);
+		EntityRendererRegistry.register(ModEntities.INFECTED, context -> new SpecialInfectedRenderer<>(
+				context, ZombieInfection.id("textures/entity/infected.png"), 1.0F));
 		EntityRendererRegistry.register(ModEntities.RUNNER, context -> new SpecialInfectedRenderer<>(
 				context, ZombieInfection.id("textures/entity/runner.png"), 0.92F));
 		EntityRendererRegistry.register(ModEntities.BLOATER, context -> new SpecialInfectedRenderer<>(

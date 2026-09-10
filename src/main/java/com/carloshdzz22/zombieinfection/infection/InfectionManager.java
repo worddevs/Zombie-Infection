@@ -45,22 +45,43 @@ public final class InfectionManager {
 	}
 
 	public static int addInfection(ServerPlayer player, int amount) {
-		return setInfection(player, getInfection(player) + amount);
+		return setInfection(player, clamp((long) getInfection(player) + amount));
 	}
 
 	public static int reduceInfection(ServerPlayer player, int amount) {
-		return setInfection(player, getInfection(player) - Math.max(0, amount));
+		return setInfection(player, clamp((long) getInfection(player) - Math.max(0, amount)));
 	}
 
 	public static void applySuppression(ServerPlayer player, int durationTicks) {
-		long current = player.getAttachedOrElse(InfectionAttachments.SUPPRESSION_UNTIL, 0L);
-		long until = Math.max(current, player.level().getGameTime()) + Math.max(0, durationTicks);
+		long now = serverTime(player);
+		int duration = Math.max(0, durationTicks);
+		long until = now > Long.MAX_VALUE - duration ? Long.MAX_VALUE : now + duration;
 		player.setAttached(InfectionAttachments.SUPPRESSION_UNTIL, until);
 	}
 
+	public static long serverTime(ServerPlayer player) {
+		return Math.max(0, player.level().getServer().overworld().getGameTime());
+	}
+
+	public static long suppressionRemainingTicks(ServerPlayer player) {
+		long until = player.getAttachedOrElse(InfectionAttachments.SUPPRESSION_UNTIL, 0L);
+		long now = serverTime(player);
+		return until <= now ? 0 : until - now;
+	}
+
+	public static long suppressionRemainingSeconds(ServerPlayer player) {
+		long ticks = suppressionRemainingTicks(player);
+		return ticks / 20 + (ticks % 20 == 0 ? 0 : 1);
+	}
+
 	public static boolean isSuppressed(ServerPlayer player) {
-		return player.getAttachedOrElse(InfectionAttachments.SUPPRESSION_UNTIL, 0L)
-				> player.level().getGameTime();
+		return suppressionRemainingTicks(player) > 0;
+	}
+
+	public static boolean tryInfect(ServerPlayer player, RandomSource random,
+			com.carloshdzz22.zombieinfection.config.InfectionSource source) {
+		var profile = com.carloshdzz22.zombieinfection.config.GameplayConfig.current().infection(source);
+		return tryInfect(player, random, (float) profile.chance(), profile.minimum(), profile.maximum(), source.key());
 	}
 
 	public static void tryInfectFromZombie(ServerPlayer player, Zombie zombie) {
@@ -74,18 +95,25 @@ public final class InfectionManager {
 
 	public static boolean tryInfect(ServerPlayer player, RandomSource random, float chance,
 			int minimumAmount, int maximumAmount, String sourceName) {
-		if (isSuppressed(player) || getInfection(player) >= MAX_INFECTION
-				|| random.nextFloat() >= chance) {
+		if (!player.isAlive() || player.isSpectator() || getInfection(player) >= MAX_INFECTION
+				|| !Float.isFinite(chance) || random.nextFloat() >= Math.clamp(chance, 0, 1)) {
 			return false;
 		}
 
-		int minimum = Math.max(0, Math.min(minimumAmount, maximumAmount));
-		int maximum = Math.max(minimum, Math.max(minimumAmount, maximumAmount));
+		int minimum = Math.clamp(Math.min(minimumAmount, maximumAmount), 0, MAX_INFECTION);
+		int maximum = Math.clamp(Math.max(minimumAmount, maximumAmount), 0, MAX_INFECTION);
 		int amount = minimum + random.nextInt(maximum - minimum + 1);
+		if (amount == 0) return false;
+		if (isSuppressed(player)) {
+			InfectionFeedback.notice(player, "message.zombie-infection.contagion_blocked");
+			return false;
+		}
+		int previous = getInfection(player);
 		int updated = addInfection(player, amount);
-		player.sendSystemMessage(Component.translatable("message.zombie-infection.infected", amount, updated));
-		ZombieInfection.LOGGER.info("{} was infected by {} (+{}; {}%)",
-				player.getGameProfile().getName(), sourceName, amount, updated);
+		int applied = updated - previous;
+		InfectionFeedback.notice(player, "message.zombie-infection.infection_gain", applied);
+		ZombieInfection.LOGGER.debug("{} was infected by {} (+{}; {}%)",
+				player.getGameProfile().getName(), sourceName, applied, updated);
 		return true;
 	}
 
@@ -141,7 +169,7 @@ public final class InfectionManager {
 		player.hurtServer(player.level(), player.damageSources().genericKill(), Float.MAX_VALUE);
 	}
 
-	private static int clamp(int value) {
-		return Math.max(MIN_INFECTION, Math.min(MAX_INFECTION, value));
+	private static int clamp(long value) {
+		return (int) Math.max(MIN_INFECTION, Math.min(MAX_INFECTION, value));
 	}
 }

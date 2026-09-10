@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "zombie-infection-tests",
+  "version": "1.0.0",
+  "name": "Zombie Infection Regression Tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.carloshdzz22.zombieinfection.outbreak.InfectedGameTests",
+      "com.carloshdzz22.zombieinfection.outbreak.SurvivalGameTests"
+    ]
+  },
+  "depends": {
+    "zombie-infection": "*"
+  }
+}

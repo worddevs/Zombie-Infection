@@ -12,14 +12,12 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Collections;
-import java.util.Set;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 /** Adds the primary Medical Record entry point to vanilla inventory screens. */
 public final class MedicalRecordAccess {
-    private static final Set<Screen> INPUT_HOOKS =
-            Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Map<Screen, Button> CURRENT_BUTTONS = new WeakHashMap<>();
 
     private MedicalRecordAccess() {
     }
@@ -36,20 +34,21 @@ public final class MedicalRecordAccess {
             int y = Math.max(4, scaledHeight / 2 - (creative ? 68 : 83));
             Button button = Button.builder(
                             Component.translatable("screen.zombie-infection.record.open.short"),
-                            ignored -> {
-                            })
+                            ignored -> open(client))
                     .bounds(x, y, 20, 20)
                     .build();
             button.setTooltip(Tooltip.create(
                     Component.translatable("screen.zombie-infection.record.open")));
             Screens.getButtons(screen).add(button);
 
-            if (INPUT_HOOKS.add(screen)) {
+            if (CURRENT_BUTTONS.put(screen, button) == null) {
                 ScreenMouseEvents.afterMouseClick(screen).register(
                         (clickedScreen, mouseX, mouseY, mouseButton) -> {
-                            if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT
-                                    && mouseX >= x && mouseX < x + 20
-                                    && mouseY >= y && mouseY < y + 20) {
+                            Button current = CURRENT_BUTTONS.get(clickedScreen);
+                            if (client.screen == clickedScreen
+                                    && mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT
+                                    && current != null && current.active && current.visible
+                                    && current.isMouseOver(mouseX, mouseY)) {
                                 open(client);
                             }
                         });

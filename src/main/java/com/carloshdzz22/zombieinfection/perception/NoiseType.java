@@ -1,6 +1,6 @@
 package com.carloshdzz22.zombieinfection.perception;
 
-/** Reusable noise categories. Gun types are API-ready but do not add weapons. */
+/** Shared perception categories; gunshot types remain available for future integrations. */
 public enum NoiseType {
     FOOTSTEP,
     SPRINT,

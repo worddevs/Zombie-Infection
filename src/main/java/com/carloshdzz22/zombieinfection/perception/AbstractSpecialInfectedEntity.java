@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/** Shared brain for all mod infected, including the common population. */
 public abstract class AbstractSpecialInfectedEntity<E extends AbstractSpecialInfectedEntity<E>>
         extends Zombie implements SmartBrainOwner<E> {
     @Nullable
@@ -46,6 +47,27 @@ public abstract class AbstractSpecialInfectedEntity<E extends AbstractSpecialInf
     protected abstract float pursuitSpeed();
 
     protected abstract int meleeAttackInterval();
+
+    protected int pursuitUpdateInterval() {
+        return 0;
+    }
+
+    @Override
+    protected final boolean isSunSensitive() {
+        return false;
+    }
+
+    @Override
+    protected final void populateDefaultEquipmentSlots(net.minecraft.util.RandomSource random,
+            net.minecraft.world.DifficultyInstance difficulty) {
+        // Natural infected do not generate vanilla swords, shovels or random armor.
+        // Equipment explicitly supplied by players/commands still follows normal drop rules.
+    }
+
+    @Override
+    protected final net.minecraft.world.item.ItemStack getSkull() {
+        return net.minecraft.world.item.ItemStack.EMPTY;
+    }
 
     protected double investigationSpeed() {
         return 1.0;
@@ -163,6 +185,10 @@ public abstract class AbstractSpecialInfectedEntity<E extends AbstractSpecialInf
 
     final int brainMeleeAttackInterval() {
         return meleeAttackInterval();
+    }
+
+    final int brainPursuitUpdateInterval() {
+        return pursuitUpdateInterval();
     }
 
     final double brainVisionRange() {

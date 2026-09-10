@@ -37,6 +37,7 @@ public final class InfectionEvents {
 
 	private static boolean isExtractable(LivingEntity entity) {
 		return entity.getType() == EntityType.ZOMBIE
+				|| entity.getType() == ModEntities.INFECTED
 				|| entity.getType() == ModEntities.RUNNER
 				|| entity.getType() == ModEntities.BLOATER
 				|| entity.getType() == ModEntities.SPITTER;
@@ -44,7 +45,12 @@ public final class InfectionEvents {
 
 	private static void tryExtraction(LivingEntity entity, ServerLevel level, ServerPlayer player) {
 		InteractionHand kitHand = findKitHand(player);
-		if (kitHand == null || entity.getRandom().nextFloat() >= 0.60F) {
+		if (kitHand == null) {
+			return;
+		}
+		if (entity.getRandom().nextFloat() >= 0.60F) {
+			player.displayClientMessage(net.minecraft.network.chat.Component.translatable(
+					"message.zombie-infection.extraction_failed").withStyle(net.minecraft.ChatFormatting.GRAY), true);
 			return;
 		}
 
@@ -53,6 +59,9 @@ public final class InfectionEvents {
 				? ModItems.INFECTED_TISSUE
 				: ModItems.INFECTED_BLOOD_SAMPLE;
 		entity.spawnAtLocation(level, material);
+		player.displayClientMessage(net.minecraft.network.chat.Component.translatable(
+				"message.zombie-infection.extraction_success", material.getName())
+				.withStyle(net.minecraft.ChatFormatting.GREEN), true);
 
 		if (!player.isCreative()) {
 			player.getItemInHand(kitHand).hurtAndBreak(1, level, player, ignored -> {

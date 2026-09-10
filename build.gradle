@@ -24,6 +24,20 @@ loom {
 	}
 }
 
+// Opt-in regression tests run in an isolated server and are never packaged in the mod JAR.
+if (project.hasProperty("gametest")) {
+	fabricApi {
+		configureTests {
+			createSourceSet = true
+			modId = "zombie-infection-tests"
+			enableGameTests = true
+			enableClientGameTests = false
+			clearRunDirectory = false
+		}
+	}
+	loom.runs.gameTest.vmArg "-Dfabric-api.gametest.report-file=${layout.buildDirectory.file('gametest-results.xml').get().asFile}"
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.officialMojangMappings()

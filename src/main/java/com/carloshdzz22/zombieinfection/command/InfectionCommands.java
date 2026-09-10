@@ -26,6 +26,11 @@ public final class InfectionCommands {
 	private static void registerTree(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("infection")
 				.executes(InfectionCommands::query)
+				.then(Commands.literal("outbreak").executes(InfectionCommands::outbreak))
+				.then(Commands.literal("config")
+						.requires(source -> source.hasPermission(ADMIN_PERMISSION_LEVEL))
+						.then(Commands.literal("reload").executes(InfectionCommands::reloadConfig))
+						.then(Commands.literal("show").executes(InfectionCommands::showConfig)))
 				.then(Commands.literal("set")
 						.requires(source -> source.hasPermission(ADMIN_PERMISSION_LEVEL))
 						.then(Commands.argument("player", EntityArgument.player())
@@ -47,8 +52,51 @@ public final class InfectionCommands {
 		ServerPlayer player = context.getSource().getPlayerOrException();
 		int infection = InfectionManager.getInfection(player);
 		context.getSource().sendSuccess(
-				() -> Component.translatable("command.zombie-infection.query", infection), false);
+				() -> Component.translatable("command.zombie-infection.query_status", infection,
+						InfectionManager.suppressionRemainingSeconds(player)), false);
 		return infection;
+	}
+
+	private static int reloadConfig(CommandContext<CommandSourceStack> context) {
+		try {
+			com.carloshdzz22.zombieinfection.config.GameplayConfig.FILE.reload();
+			context.getSource().sendSuccess(() -> Component.translatable("command.zombie-infection.config.reloaded"), true);
+			return 1;
+		} catch (java.io.IOException | IllegalArgumentException error) {
+			context.getSource().sendFailure(Component.translatable("command.zombie-infection.config.failed", error.getMessage()));
+			return 0;
+		}
+	}
+
+	private static int showConfig(CommandContext<CommandSourceStack> context) {
+		var config = com.carloshdzz22.zombieinfection.config.GameplayConfig.current();
+		context.getSource().sendSuccess(() -> Component.translatable("command.zombie-infection.config.values",
+				config.naturalSpawning(), config.densityMultiplier(), config.dayCommonMultiplier(),
+				config.dayRunnerMultiplier(), config.daySpecialMultiplier(), config.nightMultiplier(),
+				config.minimumPlayerDistance(), config.maximumBlockLight()), false);
+		return outbreak(context);
+	}
+
+	private static int outbreak(CommandContext<CommandSourceStack> context) {
+		var source = context.getSource();
+		var level = source.getLevel().getServer().overworld();
+		var stage = com.carloshdzz22.zombieinfection.outbreak.OutbreakLevel.from(level);
+		var config = com.carloshdzz22.zombieinfection.config.GameplayConfig.current();
+		boolean daytime = Math.floorMod(level.getDayTime(), 24000L) < 12000;
+		Component multipliers = daytime
+				? Component.translatable("command.zombie-infection.day_multipliers", config.dayCommonMultiplier(),
+						config.dayRunnerMultiplier(), config.daySpecialMultiplier())
+				: Component.literal(Double.toString(config.nightMultiplier()));
+		source.sendSuccess(() -> Component.translatable("command.zombie-infection.outbreak",
+				com.carloshdzz22.zombieinfection.outbreak.OutbreakLevel.day(level.getDayTime()),
+				stage.index(), Component.translatable(stage.nameKey()),
+				Component.translatable(daytime
+						? "command.zombie-infection.day" : "command.zombie-infection.night"),
+				multipliers,
+				com.carloshdzz22.zombieinfection.outbreak.OutbreakSpawnRules.effectiveTotalCap(stage),
+				com.carloshdzz22.zombieinfection.outbreak.OutbreakSpawnRules.effectiveSpecialCap(stage),
+				Component.translatable(config.naturalSpawning() ? "command.zombie-infection.on" : "command.zombie-infection.off")), false);
+		return 1;
 	}
 
 	private static int set(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

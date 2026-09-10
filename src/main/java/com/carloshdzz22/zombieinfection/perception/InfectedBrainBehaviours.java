@@ -36,7 +36,8 @@ public final class InfectedBrainBehaviours {
     public static <E extends AbstractSpecialInfectedEntity<E>> BrainActivityGroup<E> meleeFightTasks() {
         return BrainActivityGroup.fightTasks(
                 new MaintainAttackTargetBehaviour<E>(),
-                new PursueAttackTargetBehaviour<E>(),
+                new PursueAttackTargetBehaviour<E>()
+                        .cooldownFor(entity -> entity.brainPursuitUpdateInterval()),
                 new AnimatableMeleeAttack<E>(0)
                         .attackInterval(entity -> entity.brainMeleeAttackInterval()));
     }

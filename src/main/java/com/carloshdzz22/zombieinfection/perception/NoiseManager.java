@@ -21,7 +21,7 @@ public final class NoiseManager {
     public static int emit(ServerLevel level, Vec3 position, double radius, NoiseType type,
             @Nullable Entity source) {
         NoiseEvent event = new NoiseEvent(position, radius, type, source);
-        AABB searchBox = new AABB(position, position).inflate(radius);
+        AABB searchBox = new AABB(position, position).inflate(InfectedHearing.searchRadius(radius));
         int reactions = 0;
         for (AbstractSpecialInfectedEntity infected : level.getEntitiesOfClass(
                 AbstractSpecialInfectedEntity.class, searchBox, Entity::isAlive)) {

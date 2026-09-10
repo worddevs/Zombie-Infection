@@ -63,7 +63,7 @@ public final class InfectedSpitEntity extends ThrowableItemProjectile {
                 ? player.hurtServer(level, damageSources().mobProjectile(this, livingOwner), 3.0F)
                 : player.hurtServer(level, damageSources().magic(), 3.0F);
         if (damaged) {
-            InfectionManager.tryInfect(player, getRandom(), 0.25F, 5, 10, "spitter_projectile");
+            InfectionManager.tryInfect(player, getRandom(), com.carloshdzz22.zombieinfection.config.InfectionSource.SPITTER_PROJECTILE);
             player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 20 * 3, 0));
         }
     }
@@ -74,12 +74,8 @@ public final class InfectedSpitEntity extends ThrowableItemProjectile {
         if (level() instanceof ServerLevel level) {
             InfectedCloudEntity cloud = new InfectedCloudEntity(ModEntities.INFECTED_CLOUD, level);
             cloud.setPos(getX(), getY(), getZ());
-            if (getOwner() instanceof LivingEntity owner) {
-                cloud.configure(owner, 2.25F, 80, 0.10F, 1, 3);
-            } else {
-                cloud.setRadius(2.25F);
-                cloud.setDuration(80);
-            }
+            cloud.configure(getOwner() instanceof LivingEntity owner ? owner : null, 2.25F, 80,
+                    com.carloshdzz22.zombieinfection.config.InfectionSource.SPITTER_ZONE);
             level.addFreshEntity(cloud);
             level.broadcastEntityEvent(this, (byte) 3);
             discard();

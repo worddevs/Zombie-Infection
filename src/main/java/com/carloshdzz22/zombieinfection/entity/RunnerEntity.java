@@ -2,6 +2,7 @@ package com.carloshdzz22.zombieinfection.entity;
 
 import com.carloshdzz22.zombieinfection.infection.InfectionManager;
 import com.carloshdzz22.zombieinfection.perception.AbstractSpecialInfectedEntity;
+import com.carloshdzz22.zombieinfection.perception.InfectedHearing;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 
 public final class RunnerEntity extends AbstractSpecialInfectedEntity<RunnerEntity> {
-    private static final float INFECTION_CHANCE = 0.30F;
 
     public RunnerEntity(EntityType<? extends Zombie> type, Level level) {
         super(type, level);
@@ -36,7 +36,7 @@ public final class RunnerEntity extends AbstractSpecialInfectedEntity<RunnerEnti
 
     @Override
     protected double hearingRange() {
-        return 46.0;
+        return InfectedHearing.RUNNER.range();
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class RunnerEntity extends AbstractSpecialInfectedEntity<RunnerEnti
 
     @Override
     protected double noiseSensitivity() {
-        return 1.25;
+        return InfectedHearing.RUNNER.sensitivity();
     }
 
     @Override
@@ -93,7 +93,7 @@ public final class RunnerEntity extends AbstractSpecialInfectedEntity<RunnerEnti
     public boolean doHurtTarget(ServerLevel level, Entity target) {
         boolean damaged = super.doHurtTarget(level, target);
         if (damaged && target instanceof ServerPlayer player) {
-            InfectionManager.tryInfect(player, getRandom(), INFECTION_CHANCE, 8, 15, "runner");
+            InfectionManager.tryInfect(player, getRandom(), com.carloshdzz22.zombieinfection.config.InfectionSource.RUNNER);
         }
         return damaged;
     }

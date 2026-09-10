@@ -2,6 +2,7 @@ package com.carloshdzz22.zombieinfection.registry;
 
 import com.carloshdzz22.zombieinfection.ZombieInfection;
 import com.carloshdzz22.zombieinfection.entity.BloaterEntity;
+import com.carloshdzz22.zombieinfection.entity.CommonInfectedEntity;
 import com.carloshdzz22.zombieinfection.entity.InfectedCloudEntity;
 import com.carloshdzz22.zombieinfection.entity.RunnerEntity;
 import com.carloshdzz22.zombieinfection.entity.SpitterEntity;
@@ -16,6 +17,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public final class ModEntities {
+    public static final EntityType<CommonInfectedEntity> INFECTED = register(
+            "infected",
+            EntityType.Builder.of(CommonInfectedEntity::new, MobCategory.MONSTER)
+                    .sized(0.60F, 1.95F)
+                    .eyeHeight(1.74F)
+                    .clientTrackingRange(8)
+    );
     public static final EntityType<RunnerEntity> RUNNER = register(
             "runner",
             EntityType.Builder.of(RunnerEntity::new, MobCategory.MONSTER)
@@ -60,10 +68,11 @@ public final class ModEntities {
     }
 
     public static void initialize() {
+        FabricDefaultAttributeRegistry.register(INFECTED, CommonInfectedEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(RUNNER, RunnerEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(BLOATER, BloaterEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SPITTER, SpitterEntity.createAttributes());
-        ZombieInfection.LOGGER.info("Registered Zombie Infection special infected entities");
+        ZombieInfection.LOGGER.info("Registered Zombie Infection common and special infected entities");
     }
 
     private static <T extends Entity> EntityType<T> register(String path, EntityType.Builder<T> builder) {

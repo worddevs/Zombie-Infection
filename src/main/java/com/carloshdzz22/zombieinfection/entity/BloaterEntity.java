@@ -3,6 +3,7 @@ package com.carloshdzz22.zombieinfection.entity;
 import com.carloshdzz22.zombieinfection.infection.InfectionManager;
 import com.carloshdzz22.zombieinfection.registry.ModEntities;
 import com.carloshdzz22.zombieinfection.perception.AbstractSpecialInfectedEntity;
+import com.carloshdzz22.zombieinfection.perception.InfectedHearing;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 
 public final class BloaterEntity extends AbstractSpecialInfectedEntity<BloaterEntity> {
-    private static final float INFECTION_CHANCE = 0.40F;
     private boolean releasedCloud;
 
     public BloaterEntity(EntityType<? extends Zombie> type, Level level) {
@@ -41,7 +41,7 @@ public final class BloaterEntity extends AbstractSpecialInfectedEntity<BloaterEn
 
     @Override
     protected double hearingRange() {
-        return 28.0;
+        return InfectedHearing.BLOATER.range();
     }
 
     @Override
@@ -51,7 +51,7 @@ public final class BloaterEntity extends AbstractSpecialInfectedEntity<BloaterEn
 
     @Override
     protected double noiseSensitivity() {
-        return 0.80;
+        return InfectedHearing.BLOATER.sensitivity();
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class BloaterEntity extends AbstractSpecialInfectedEntity<BloaterEn
     public boolean doHurtTarget(ServerLevel level, Entity target) {
         boolean damaged = super.doHurtTarget(level, target);
         if (damaged && target instanceof ServerPlayer player) {
-            InfectionManager.tryInfect(player, getRandom(), INFECTION_CHANCE, 10, 18, "bloater");
+            InfectionManager.tryInfect(player, getRandom(), com.carloshdzz22.zombieinfection.config.InfectionSource.BLOATER);
         }
         return damaged;
     }
@@ -113,7 +113,7 @@ public final class BloaterEntity extends AbstractSpecialInfectedEntity<BloaterEn
         if (shouldRelease && level() instanceof ServerLevel level) {
             InfectedCloudEntity cloud = new InfectedCloudEntity(ModEntities.INFECTED_CLOUD, level);
             cloud.setPos(getX(), getY(), getZ());
-            cloud.configure(this, 3.5F, 100, 0.15F, 2, 5);
+            cloud.configure(this, 3.5F, 100, com.carloshdzz22.zombieinfection.config.InfectionSource.BLOATER_CLOUD);
             level.addFreshEntity(cloud);
         }
     }

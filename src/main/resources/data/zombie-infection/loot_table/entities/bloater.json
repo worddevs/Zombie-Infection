@@ -2,25 +2,30 @@
   "type": "minecraft:entity",
   "pools": [
     {
-      "bonus_rolls": 0.0,
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance_with_enchanted_bonus",
+          "enchantment": "minecraft:looting",
+          "unenchanted_chance": 0.18,
+          "enchanted_chance": {
+            "type": "minecraft:clamped",
+            "value": {
+              "type": "minecraft:linear",
+              "base": 0.20,
+              "per_level_above_first": 0.02
+            },
+            "min": 0.18,
+            "max": 0.24
+          }
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "enchantment": "minecraft:looting",
-              "function": "minecraft:enchanted_count_increase"
-            }
-          ],
           "name": "zombie-infection:bloater_toxin_sac"
         }
-      ],
-      "rolls": 1.0
+      ]
     }
   ],
   "random_sequence": "zombie-infection:entities/bloater"

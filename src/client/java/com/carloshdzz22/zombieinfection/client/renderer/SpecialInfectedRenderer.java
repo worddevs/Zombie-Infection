@@ -5,14 +5,14 @@ import net.minecraft.client.model.ZombieModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Zombie;
 
 public final class SpecialInfectedRenderer<T extends Zombie>
-        extends AbstractZombieRenderer<T, ZombieRenderState, ZombieModel<ZombieRenderState>> {
+        extends AbstractZombieRenderer<T, InfectedRenderState, ZombieModel<InfectedRenderState>> {
     private final ResourceLocation texture;
     private final float visualScale;
+    private final InfectedHealthBar healthBar = new InfectedHealthBar();
 
     public SpecialInfectedRenderer(EntityRendererProvider.Context context, ResourceLocation texture,
                                    float visualScale) {
@@ -28,18 +28,36 @@ public final class SpecialInfectedRenderer<T extends Zombie>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ZombieRenderState state) {
+    public ResourceLocation getTextureLocation(InfectedRenderState state) {
         return texture;
     }
 
     @Override
-    protected void scale(ZombieRenderState state, PoseStack poseStack) {
+    protected void scale(InfectedRenderState state, PoseStack poseStack) {
         super.scale(state, poseStack);
         poseStack.scale(visualScale, visualScale, visualScale);
     }
 
     @Override
-    public ZombieRenderState createRenderState() {
-        return new ZombieRenderState();
+    public InfectedRenderState createRenderState() {
+        return new InfectedRenderState();
+    }
+
+    @Override
+    public void extractRenderState(T entity, InfectedRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        // Our compact bar supplies the name with the same visibility restrictions.
+        state.nameTag = null;
+        healthBar.extract(entity, state, partialTick);
+    }
+
+    @Override
+    public void render(InfectedRenderState state, PoseStack poses,
+            net.minecraft.client.renderer.MultiBufferSource buffers, int packedLight) {
+        super.render(state, poses, buffers, packedLight);
+        if (state.showHealth) {
+            InfectedHealthBar.render(state, poses, buffers, getFont(),
+                    entityRenderDispatcher.cameraOrientation(), visualScale);
+        }
     }
 }

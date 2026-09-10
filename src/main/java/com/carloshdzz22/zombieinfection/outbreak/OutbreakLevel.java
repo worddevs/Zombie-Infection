@@ -8,31 +8,35 @@ import net.minecraft.world.level.Level;
  * No redundant saved value is required: time persistence is already handled by Minecraft.
  */
 public enum OutbreakLevel {
-    CONTAINED(0, 0, 48, 18, 14, 0.22, 6),
-    EMERGING(1, 3, 48, 22, 18, 0.32, 9),
-    SPREADING(2, 7, 46, 25, 22, 0.46, 13),
-    SEVERE(3, 15, 43, 27, 24, 0.62, 18),
-    CRITICAL(4, 30, 40, 29, 26, 0.78, 24);
+    CONTAINED(0, 0, 92, 5, 2, 1, 0.22, 12, 1),
+    EMERGING(1, 3, 86, 8, 3, 3, 0.32, 18, 2),
+    SPREADING(2, 7, 78, 12, 5, 5, 0.46, 24, 3),
+    SEVERE(3, 15, 70, 16, 7, 7, 0.62, 32, 5),
+    CRITICAL(4, 30, 62, 20, 9, 9, 0.78, 40, 7);
 
     public static final long TICKS_PER_DAY = 24_000L;
 
     private final int index;
     private final long firstDay;
+    private final int commonWeight;
     private final int runnerWeight;
     private final int bloaterWeight;
     private final int spitterWeight;
     private final double densityMultiplier;
     private final int localPopulationCap;
+    private final int localSpecialCap;
 
-    OutbreakLevel(int index, long firstDay, int runnerWeight, int bloaterWeight,
-            int spitterWeight, double densityMultiplier, int localPopulationCap) {
+    OutbreakLevel(int index, long firstDay, int commonWeight, int runnerWeight, int bloaterWeight,
+            int spitterWeight, double densityMultiplier, int localPopulationCap, int localSpecialCap) {
         this.index = index;
         this.firstDay = firstDay;
+        this.commonWeight = commonWeight;
         this.runnerWeight = runnerWeight;
         this.bloaterWeight = bloaterWeight;
         this.spitterWeight = spitterWeight;
         this.densityMultiplier = densityMultiplier;
         this.localPopulationCap = localPopulationCap;
+        this.localSpecialCap = localSpecialCap;
     }
 
     public static OutbreakLevel fromDay(long day) {
@@ -72,6 +76,10 @@ public enum OutbreakLevel {
         return runnerWeight;
     }
 
+    public int commonWeight() {
+        return commonWeight;
+    }
+
     public int bloaterWeight() {
         return bloaterWeight;
     }
@@ -86,6 +94,10 @@ public enum OutbreakLevel {
 
     public int localPopulationCap() {
         return localPopulationCap;
+    }
+
+    public int localSpecialCap() {
+        return localSpecialCap;
     }
 
     public String nameKey() {

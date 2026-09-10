@@ -2,6 +2,7 @@ package com.carloshdzz22.zombieinfection.entity;
 
 import com.carloshdzz22.zombieinfection.entity.projectile.InfectedSpitEntity;
 import com.carloshdzz22.zombieinfection.perception.AbstractSpecialInfectedEntity;
+import com.carloshdzz22.zombieinfection.perception.InfectedHearing;
 import com.carloshdzz22.zombieinfection.perception.InfectedPerceptionSystem;
 import com.carloshdzz22.zombieinfection.perception.MaintainAttackTargetBehaviour;
 import com.carloshdzz22.zombieinfection.perception.SpitterCombatBehaviour;
@@ -47,7 +48,7 @@ public final class SpitterEntity extends AbstractSpecialInfectedEntity<SpitterEn
 
     @Override
     protected double hearingRange() {
-        return 34.0;
+        return InfectedHearing.SPITTER.range();
     }
 
     @Override
@@ -57,7 +58,7 @@ public final class SpitterEntity extends AbstractSpecialInfectedEntity<SpitterEn
 
     @Override
     protected double noiseSensitivity() {
-        return 1.0;
+        return InfectedHearing.SPITTER.sensitivity();
     }
 
     @Override
@@ -95,6 +96,16 @@ public final class SpitterEntity extends AbstractSpecialInfectedEntity<SpitterEn
     @Override
     public void setBaby(boolean baby) {
         super.setBaby(false);
+    }
+
+    @Override
+    public boolean doHurtTarget(ServerLevel level, net.minecraft.world.entity.Entity target) {
+        boolean damaged = super.doHurtTarget(level, target);
+        if (damaged && target instanceof net.minecraft.server.level.ServerPlayer player) {
+            com.carloshdzz22.zombieinfection.infection.InfectionManager.tryInfect(player, getRandom(),
+                    com.carloshdzz22.zombieinfection.config.InfectionSource.SPITTER);
+        }
+        return damaged;
     }
 
     public double maximumAttackRange() {

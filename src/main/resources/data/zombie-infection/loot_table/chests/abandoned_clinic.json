@@ -43,7 +43,8 @@
       "rolls": 1.0,
       "entries": [
         {"type": "minecraft:item", "name": "zombie-infection:extraction_kit", "weight": 8},
-        {"type": "minecraft:item", "name": "zombie-infection:infected_sample", "weight": 2},
+        {"type": "minecraft:item", "name": "zombie-infection:infected_tissue", "weight": 1},
+        {"type": "minecraft:item", "name": "zombie-infection:infected_blood_sample", "weight": 1},
         {"type": "minecraft:item", "name": "zombie-infection:basic_antiviral", "weight": 5},
         {"type": "minecraft:item", "name": "zombie-infection:antiviral_injection", "weight": 1},
         {"type": "minecraft:empty", "weight": 84}

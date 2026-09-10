@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "zombie-infection:item/infected_spawn_egg"
+  }
+}
